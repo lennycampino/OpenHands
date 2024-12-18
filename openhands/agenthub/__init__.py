@@ -8,6 +8,7 @@ load_dotenv()
 
 
 from openhands.agenthub import (  # noqa: E402
+    aifmd_compliance_agent,
     browsing_agent,
     codeact_agent,
     delegator_agent,
@@ -16,6 +17,7 @@ from openhands.agenthub import (  # noqa: E402
 )
 
 __all__ = [
+    'aifmd_compliance_agent',
     'codeact_agent',
     'planner_agent',
     'delegator_agent',
