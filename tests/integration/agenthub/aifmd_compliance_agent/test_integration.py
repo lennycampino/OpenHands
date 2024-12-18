@@ -2,6 +2,7 @@ import pytest
 import json
 import numpy as np
 from datetime import datetime, timedelta
+from unittest.mock import Mock
 
 from openhands.agenthub.aifmd_compliance_agent.agent import AIFMDComplianceAgent
 from openhands.agenthub.aifmd_compliance_agent.portfolio_risk_manager import PortfolioPosition

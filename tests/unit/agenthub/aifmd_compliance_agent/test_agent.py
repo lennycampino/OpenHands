@@ -46,9 +46,9 @@ def agent(mock_llm, mock_config):
 @pytest.fixture
 def mock_state():
     """Create a mock State object."""
-    state = Mock(spec=State)
-    state.get_last_observation.return_value = None
-    state.get_last_user_message.return_value = "Test message"
+    state = Mock()
+    state.get_last_observation = Mock(return_value=None)
+    state.get_last_user_message = Mock(return_value="Test message")
     return state
 
 @pytest.fixture
