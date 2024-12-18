@@ -1,7 +1,7 @@
 from typing import Any, Dict, List, Optional, Tuple
 
 from openhands.controller.agent import Agent
-from openhands.controller.state import State
+from openhands.controller.state.state import State
 from openhands.events.action import (
     Action,
     AgentFinishAction,

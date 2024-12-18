@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 from openhands.agenthub.aifmd_compliance_agent.agent import AIFMDComplianceAgent
 from openhands.agenthub.aifmd_compliance_agent.portfolio_risk_manager import PortfolioPosition
-from openhands.controller.state import State
+from openhands.controller.state.state import State
 from openhands.events.action import (
     Action,
     AgentFinishAction,
