@@ -120,7 +120,7 @@ Always provide accurate, regulation-based advice and clearly reference relevant 
         """Process queries related to reporting requirements."""
         # Map of keywords to specific ESMA resources
         resource_map = {
-            "report": "https://www.esma.europa.eu/sites/default/files/library/2015/11/2014-869.pdf",  # Main reporting guidelines
+            "reporting guidelines": "https://www.esma.europa.eu/sites/default/files/library/2015/11/2014-869.pdf",  # Main reporting guidelines
             "annex iv": "https://www.esma.europa.eu/sites/default/files/library/2015/11/2014-869.pdf",  # Annex IV reporting
             "disclosure": "https://www.esma.europa.eu/sites/default/files/library/2015/11/2014-869.pdf",  # Disclosure requirements
             "technical": "https://www.esma.europa.eu/sites/default/files/library/2013-1358_aifmd_reporting_it_technical_guidance-revision5.xlsx",  # Technical guidance
@@ -133,10 +133,8 @@ Always provide accurate, regulation-based advice and clearly reference relevant 
             if keyword in query.lower():
                 return BrowseURLAction(url=url), None
 
-        # Default to main reporting guidelines if no specific match
-        return BrowseURLAction(
-            url="https://www.esma.europa.eu/sites/default/files/library/2015/11/2014-869.pdf"
-        ), None
+        # Only return action if there's a specific match
+        return None, None
 
     def step(self, state: State) -> Action:
         """Process one step of the agent's operation."""
@@ -162,12 +160,7 @@ Always provide accurate, regulation-based advice and clearly reference relevant 
         if not user_input:
             return AgentRejectAction("No user input found.")
 
-        # Check if this is a portfolio analysis request
-        portfolio_action = self._process_portfolio_analysis(user_input)
-        if portfolio_action:
-            return portfolio_action
-
-        # Check if we need to fetch regulatory or reporting information
+        # Check if we need to fetch regulatory or reporting information first
         regulatory_action, context = self._process_regulatory_query(user_input)
         if regulatory_action:
             self.last_action = regulatory_action
@@ -177,6 +170,11 @@ Always provide accurate, regulation-based advice and clearly reference relevant 
         if reporting_action:
             self.last_action = reporting_action
             return reporting_action
+
+        # Then check if this is a portfolio analysis request
+        portfolio_action = self._process_portfolio_analysis(user_input)
+        if portfolio_action:
+            return portfolio_action
 
         # Format messages for LLM
         messages = self._format_prompt(user_input, self.current_context)
