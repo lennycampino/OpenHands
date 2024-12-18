@@ -104,18 +104,33 @@ Always provide accurate, regulation-based advice and clearly reference relevant 
         """Process queries related to regulatory requirements."""
         # First, check if we need to fetch regulatory information
         if any(keyword in query.lower() for keyword in ["article", "regulation", "directive", "requirement"]):
+            # Use the consolidated AIFMD text from EUR-Lex
             return BrowseURLAction(
-                url="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32011L0061"
+                url="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02011L0061-20210802"
             ), None
         return None, None
 
     def _process_reporting_query(self, query: str) -> Tuple[Action, Optional[str]]:
         """Process queries related to reporting requirements."""
-        if any(keyword in query.lower() for keyword in ["report", "annex iv", "disclosure"]):
-            return BrowseURLAction(
-                url="https://www.esma.europa.eu/sites/default/files/library/2015/11/2013-1339_final_report_on_esma_guidelines_on_reporting_obligations_under_article_3_and_24_of_the_aifmd_revised.pdf"
-            ), None
-        return None, None
+        # Map of keywords to specific ESMA resources
+        resource_map = {
+            "report": "https://www.esma.europa.eu/sites/default/files/library/2015/11/2014-869.pdf",  # Main reporting guidelines
+            "annex iv": "https://www.esma.europa.eu/sites/default/files/library/2015/11/2014-869.pdf",  # Annex IV reporting
+            "disclosure": "https://www.esma.europa.eu/sites/default/files/library/2015/11/2014-869.pdf",  # Disclosure requirements
+            "technical": "https://www.esma.europa.eu/sites/default/files/library/2013-1358_aifmd_reporting_it_technical_guidance-revision5.xlsx",  # Technical guidance
+            "validation": "https://www.esma.europa.eu/document/aifmd-reporting-it-technical-guidance-rev-6-updated",  # Validation rules
+            "q&a": "https://www.esma.europa.eu/sites/default/files/library/esma34-32-352_qa_aifmd.pdf"  # Q&A document
+        }
+
+        # Check for specific keywords and return appropriate resource
+        for keyword, url in resource_map.items():
+            if keyword in query.lower():
+                return BrowseURLAction(url=url), None
+
+        # Default to main reporting guidelines if no specific match
+        return BrowseURLAction(
+            url="https://www.esma.europa.eu/sites/default/files/library/2015/11/2014-869.pdf"
+        ), None
 
     def step(self, state: State) -> Action:
         """Process one step of the agent's operation."""
