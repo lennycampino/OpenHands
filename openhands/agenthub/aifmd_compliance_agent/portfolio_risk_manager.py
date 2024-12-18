@@ -202,5 +202,5 @@ class PortfolioRiskManager:
             'concentration_risks': concentration_risks,
             'leverage_metrics': leverage_metrics,
             'liquidity_assessment': liquidity_assessment,
-            'timestamp': datetime.datetime.now().isoformat()
+            'timestamp': datetime.now().isoformat()
         }

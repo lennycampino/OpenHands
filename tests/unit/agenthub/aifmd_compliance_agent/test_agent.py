@@ -202,7 +202,7 @@ class TestAIFMDComplianceAgent:
         assert "Leverage Analysis" in formatted
         assert "Liquidity Analysis" in formatted
 
-    @patch('openhands.utils.llm.format_messages')
+    @patch('openhands.utils.prompt.format_messages')
     def test_step_with_portfolio_request(self, mock_format_messages, agent, mock_state, sample_portfolio):
         """Test step method with portfolio-related request."""
         # Setup mock LLM response
@@ -221,7 +221,7 @@ class TestAIFMDComplianceAgent:
         assert isinstance(action, FileWriteAction)
         assert "risk_report" in action.path
 
-    @patch('openhands.utils.llm.format_messages')
+    @patch('openhands.utils.prompt.format_messages')
     def test_step_with_regulatory_request(self, mock_format_messages, agent, mock_state):
         """Test step method with regulatory request."""
         mock_state.get_last_user_message.return_value = "Show AIFMD Article 24"

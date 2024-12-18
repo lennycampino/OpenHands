@@ -6,7 +6,7 @@ from unittest.mock import Mock
 
 from openhands.agenthub.aifmd_compliance_agent.agent import AIFMDComplianceAgent
 from openhands.agenthub.aifmd_compliance_agent.portfolio_risk_manager import PortfolioPosition
-from openhands.controller.state.state import State
+from .test_state import TestState
 from openhands.events.action import (
     Action,
     AgentFinishAction,
@@ -112,7 +112,7 @@ class TestAIFMDComplianceAgentIntegration:
     def test_full_portfolio_analysis_workflow(self, agent, sample_portfolio_data):
         """Test complete portfolio analysis workflow."""
         # Create a mock state
-        state = State()
+        state = TestState()
         
         # Step 1: Load portfolio data
         portfolio_json = json.dumps(sample_portfolio_data)
@@ -165,7 +165,7 @@ class TestAIFMDComplianceAgentIntegration:
 
     def test_regulatory_compliance_workflow(self, agent):
         """Test regulatory compliance workflow."""
-        state = State()
+        state = TestState()
         
         # Step 1: Request AIFMD reporting guidance
         state.add_user_message("What are the reporting requirements under AIFMD Article 24?")
@@ -199,7 +199,7 @@ class TestAIFMDComplianceAgentIntegration:
 
     def test_combined_portfolio_and_regulatory_workflow(self, agent, sample_portfolio_data):
         """Test combined portfolio analysis and regulatory compliance workflow."""
-        state = State()
+        state = TestState()
         
         # Load portfolio data
         portfolio_json = json.dumps(sample_portfolio_data)
@@ -239,7 +239,7 @@ class TestAIFMDComplianceAgentIntegration:
 
     def test_error_handling_and_recovery(self, agent):
         """Test error handling and recovery capabilities."""
-        state = State()
+        state = TestState()
         
         # Test with invalid portfolio data
         state.add_observation(FileReadObservation(content="invalid json"))
