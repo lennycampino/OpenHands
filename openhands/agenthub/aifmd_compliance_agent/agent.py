@@ -12,7 +12,7 @@ from openhands.events.action import (
     MessageAction,
 )
 from openhands.events.observation import BrowserOutputObservation, FileReadObservation
-from openhands.utils.prompt import format_messages
+from openhands.core.message import Message, TextContent
 
 from typing import Any, Dict, List, Optional, Tuple, Union
 import numpy as np
@@ -83,21 +83,27 @@ Always provide accurate, regulation-based advice and clearly reference relevant 
 
     def _format_prompt(self, user_input: str, context: Optional[str] = None) -> List[Dict[str, str]]:
         """Format the prompt with conversation history and context."""
-        messages = [{"role": "system", "content": self.SYSTEM_PROMPT}]
+        messages = []
+        
+        # Add system prompt
+        messages.append(Message(role="system", content=[TextContent(text=self.SYSTEM_PROMPT)]))
         
         # Add conversation history
         for msg in self.conversation_history:
-            messages.append(msg)
+            messages.append(Message(
+                role=msg["role"],
+                content=[TextContent(text=msg["content"])]
+            ))
         
         # Add current context if available
         if context:
-            messages.append({
-                "role": "system",
-                "content": f"Current context:\n{context}"
-            })
+            messages.append(Message(
+                role="system",
+                content=[TextContent(text=f"Current context:\n{context}")]
+            ))
         
         # Add user input
-        messages.append({"role": "user", "content": user_input})
+        messages.append(Message(role="user", content=[TextContent(text=user_input)]))
         return messages
 
     def _process_regulatory_query(self, query: str) -> Tuple[Action, Optional[str]]:
@@ -190,7 +196,7 @@ Always provide accurate, regulation-based advice and clearly reference relevant 
         # Get LLM response
         try:
             response = self.llm.completion(
-                messages=format_messages(messages),
+                messages=messages,
                 temperature=0.3,  # Lower temperature for more precise responses
                 max_tokens=2000
             )
