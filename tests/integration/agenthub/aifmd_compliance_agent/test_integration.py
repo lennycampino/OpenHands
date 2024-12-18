@@ -16,9 +16,26 @@ from openhands.events.action import (
 from openhands.events.observation import FileReadObservation, BrowserOutputObservation
 
 @pytest.fixture
-def agent():
+def mock_llm():
+    """Create a mock LLM."""
+    llm = Mock()
+    response = Mock()
+    response.choices = [Mock()]
+    response.choices[0].message.content = "Test response"
+    llm.completion.return_value = response
+    return llm
+
+@pytest.fixture
+def mock_config():
+    """Create a mock config."""
+    config = Mock()
+    config.max_iterations = 10
+    return config
+
+@pytest.fixture
+def agent(mock_llm, mock_config):
     """Create a test instance of AIFMDComplianceAgent."""
-    return AIFMDComplianceAgent()
+    return AIFMDComplianceAgent(llm=mock_llm, config=mock_config)
 
 @pytest.fixture
 def sample_portfolio_data():

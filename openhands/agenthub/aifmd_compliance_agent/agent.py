@@ -70,8 +70,8 @@ You can:
 
 Always provide accurate, regulation-based advice and clearly reference relevant AIFMD articles or guidelines when applicable."""
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, llm: "LLM", config: "AgentConfig") -> None:
+        super().__init__(llm=llm, config=config)
         self.conversation_history: List[Dict[str, Any]] = []
         self.current_context: Optional[str] = None
         self.last_action: Optional[Action] = None
