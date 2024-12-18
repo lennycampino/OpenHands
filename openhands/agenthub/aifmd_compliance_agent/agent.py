@@ -12,7 +12,7 @@ from openhands.events.action import (
     MessageAction,
 )
 from openhands.events.observation import BrowserOutputObservation, FileReadObservation
-from openhands.utils.llm import format_messages
+from openhands.utils.prompt import format_messages
 
 from typing import Any, Dict, List, Optional, Tuple, Union
 import numpy as np
